@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class ExceptionHandelParallelService {
     public void example(){
-        Integer amount = 1;
+        Integer amount = -1;
         CompletableFuture<Double> completableFuturePrice = CompletableFuture.supplyAsync(() -> {
             if (amount < 0) {
                 throw new IllegalArgumentException("Amount can not be negative");
@@ -20,8 +20,9 @@ public class ExceptionHandelParallelService {
                 //ตรงนี้สำคัญมากนะครับ คือการล้วงเอา cause ที่แท้จริงของ exception ออกมา
                 while ( ex instanceof RuntimeException &&
                         Objects.nonNull(ex.getCause())
-                ) { ex = ex.getCause(); }
-
+                ) { ex = ex.getCause();
+                }
+                System.out.println(ex.getMessage());
                 return 0.00;
             } else {
                 System.out.println("Success");

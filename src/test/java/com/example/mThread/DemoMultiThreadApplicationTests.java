@@ -1,6 +1,7 @@
 package com.example.mThread;
 
 import com.example.mThread.service.CallBackChainService;
+import com.example.mThread.service.ExceptionHandelParallelService;
 import com.example.mThread.service.ParallelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ class DemoMultiThreadApplicationTests {
 
     @Autowired
     CallBackChainService callBackChainService;
+
+    @Autowired
+    ExceptionHandelParallelService exceptionHandelParallelService;
 
     @Test
     void combineService() {
@@ -37,28 +41,7 @@ class DemoMultiThreadApplicationTests {
 
     @Test
     void exampleException() {
-        Integer amount = null;
-        CompletableFuture<Double> completableFuturePrice = CompletableFuture.supplyAsync(() -> {
-            if (amount < 0) {
-				throw new RuntimeException("test");
-			} else {
-                return amount * 111.11;
-            }
-        }).handle((response, ex) -> {
-            if (ex != null) {
-                //find cause of exception
-                while (ex instanceof RuntimeException && Objects.nonNull(ex.getCause())) {
-                	ex = ex.getCause();
-					System.out.println(ex.getMessage());
-                }
-
-                return 0.00;
-            } else {
-                System.out.println("Success");
-                return response;
-            }
-        });
-        System.out.println("$" + completableFuturePrice.join());
+        exceptionHandelParallelService.example();
     }
 
 }
